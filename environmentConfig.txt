@@ -8,8 +8,14 @@ Ambiente de desenvolvimento
 + instalando o git
   $ choco install git
 
++ instalando o composer
+  $ choco install composer
+
 + instalando o php
   $ choco install php
+
++ instalando o apache
+  $ choco install apache-httpd 
 
 + instalando o node lts
   $ choco install nodejs-lts
@@ -22,6 +28,10 @@ Ambiente de desenvolvimento
 
 + instalando o mariadb
   $ choco install mariadb
+
++ instalando postgresql
+  $ choco install postgresql --params '/Password:senha /Port:porta'
+
 
 + vscode
   $ choco install vscode
