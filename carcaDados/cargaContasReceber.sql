@@ -1,6 +1,137 @@
 --tabela de contas a receber systextil: fatu_070 
 --tabela de contas recebidas systextil: fatu_075 
 
+--PARCELAS DO DOCUMENTO
+SELECT 
+	*, 
+	Agencia_Parcelas+Dig_Age_Parcelas+Nr_Conta_Age_Parcelas+Dig_Conta_Age_Parcelas Nro_Agencia 
+FROM 
+	Notas_Fiscais_Parcelas 
+WHERE 
+	Empresa_Parcelas='01' and 
+	Documento_Parcelas='025897' and Serie='1  55' 
+ORDER BY 
+	Parcela_Parcelas
+	
+--COMISSÃO DA PARCELA
+SELECT
+	* 
+FROM 
+	Notas_Fiscais_Vendedores_Parcelas 
+WHERE 
+	Empresa_NF_Vendedores='01' and 
+	Doc_NF_Vendedores='025897' and 
+	Parcela_NF_Vendedores='03' and 
+	Serie='1  55' 
+ORDER BY
+	Vendedor_NF_Vendedores
+	
+--VIEW DAS DUAS TABELAS ACIMA
+
+SELECT 
+	*, 
+	Agencia_Parcelas+Dig_Age_Parcelas+Nr_Conta_Age_Parcelas+Dig_Conta_Age_Parcelas Nro_Agencia 
+FROM 
+	Notas_Fiscais_Parcelas
+	INNER JOIN Notas_Fiscais_Vendedores_Parcelas ON 
+	Notas_Fiscais_Vendedores_Parcelas.Empresa_NF_Vendedores = Notas_Fiscais_Parcelas.Empresa_Parcelas AND
+	Notas_Fiscais_Vendedores_Parcelas.Doc_NF_Vendedores = Notas_Fiscais_Parcelas.Documento_Parcelas AND
+	Notas_Fiscais_Vendedores_Parcelas.Serie = Notas_Fiscais_Parcelas.Serie AND
+	Notas_Fiscais_Vendedores_Parcelas.Inc_Vend_Parcela = Notas_Fiscais_Parcelas.Parcela_Parcelas
+WHERE 
+	Notas_Fiscais_Parcelas.Empresa_Parcelas='01' and 
+	Notas_Fiscais_Parcelas.Documento_Parcelas='025897' and Notas_Fiscais_Parcelas.Serie='1  55' 
+ORDER BY 
+	Parcela_Parcelas
+
+--VIEW DAS DUAS TABELAS ACIMA
+
+SELECT 
+	Notas_Fiscais_Parcelas.Empresa_Parcelas,
+	Notas_Fiscais_Parcelas.Documento_Parcelas,
+	Notas_Fiscais_Parcelas.Serie,
+	Notas_Fiscais_Parcelas.Parcela_Parcelas,
+	Notas_Fiscais_Parcelas.Vencimento_Parcelas,
+	Notas_Fiscais_Parcelas.Vecto_Extenso_Parcelas,
+	Notas_Fiscais_Parcelas.Valor_Parcelas,
+	Notas_Fiscais_Vendedores_Parcelas.Vendedor_NF_Vendedores,
+	Notas_Fiscais_Vendedores_Parcelas.Tipo_Comissao_NF_Vend,
+	Notas_Fiscais_Vendedores_Parcelas.Valor_Comissao_NF_Vend,
+	CONVERT(DECIMAL(18,2),ROUND(((Notas_Fiscais_Vendedores_Parcelas.Valor_Comissao_NF_Vend / Notas_Fiscais_Parcelas.Valor_Parcelas) * 100),4))  AS Porc_Comissao,
+	Notas_Fiscais_Parcelas.Banco_Parcelas,
+	Notas_Fiscais_Parcelas.Agencia_Parcelas,
+	Notas_Fiscais_Parcelas.Dig_Age_Parcelas,
+	Notas_Fiscais_Parcelas.Nr_Conta_Age_Parcelas,
+	Notas_Fiscais_Parcelas.Dig_Conta_Age_Parcelas,
+	Notas_Fiscais_Parcelas.Operacao_Parcelas,
+	Nosso_Nr_Parcelas,
+	Notas_Fiscais_Parcelas.Despesas_Parcelas,
+	Notas_Fiscais_Parcelas.Outros_Acresc_Parcelas,
+	Notas_Fiscais_Parcelas.Juros_por_Dia_Parcelas,
+	Notas_Fiscais_Parcelas.Cliente,
+	Notas_Fiscais_Parcelas.Tem_Baixas,
+	--Notas_Fiscais_Parcelas.Inc_Parcela,
+	Notas_Fiscais_Parcelas.Nota_Debito,
+	--Obs1,
+	--Obs2,
+	--Obs3,
+	--Obs4,
+	--Obs5,
+	--Obs6,
+	--Obs7,
+	--Obs8,
+	--Obs9,
+	--Obs10,
+	Notas_Fiscais_Parcelas.Porc_Desconto,
+	Notas_Fiscais_Parcelas.Vr_Desconto,
+	Notas_Fiscais_Parcelas.Vencto_Desconto,
+	Notas_Fiscais_Parcelas.Bloqueado,
+	Notas_Fiscais_Parcelas.Bol_Fixo,
+	Notas_Fiscais_Parcelas.Bol_Variavel,
+	Notas_Fiscais_Parcelas.Bol_Carteira,
+	Notas_Fiscais_Parcelas.Bol_Cedente,
+	Notas_Fiscais_Parcelas.Bol_Impresso,
+	Notas_Fiscais_Parcelas.Id_Parcela,
+	Notas_Fiscais_Parcelas.LinhaDigitavelPrimeiro,
+	Notas_Fiscais_Parcelas.LinhaDigitavelSegundo,
+	Notas_Fiscais_Parcelas.LinhaDigitavelTerceiro,
+	Notas_Fiscais_Parcelas.LinhaDigitavelQuarto,
+	Notas_Fiscais_Parcelas.LinhaDigitavelQuinto,
+	Notas_Fiscais_Parcelas.LinhaDigitavelSexto,
+	Notas_Fiscais_Parcelas.LinhaDigitavelSetimo,
+	Notas_Fiscais_Parcelas.LinhaDigitavelOitavo,
+	Notas_Fiscais_Parcelas.Porc_Multa,
+	Notas_Fiscais_Parcelas.Valor_Multa,
+	--idParcela,
+	--Usuario,
+	--Empresa_NF_Vendedores, INICIA AQUI Notas_Fiscais_Vendedores_Parcelas
+	--Doc_NF_Vendedores,
+	--Inc_Vend_Parcela,
+	--Parcela_NF_Vendedores,
+	--Notas_Fiscais_Vendedores_Parcelas.Valor_Comissao_NF_Vend_S,
+	--Porc_Comissao,
+	--Porc_ComissaoS,
+	Notas_Fiscais_Parcelas.Agencia_Parcelas+Notas_Fiscais_Parcelas.Dig_Age_Parcelas+Notas_Fiscais_Parcelas.Nr_Conta_Age_Parcelas+Notas_Fiscais_Parcelas.Dig_Conta_Age_Parcelas Nro_Agencia 
+FROM 
+	Notas_Fiscais_Parcelas
+	INNER JOIN Notas_Fiscais_Vendedores_Parcelas ON 
+	Notas_Fiscais_Vendedores_Parcelas.Empresa_NF_Vendedores = Notas_Fiscais_Parcelas.Empresa_Parcelas AND
+	Notas_Fiscais_Vendedores_Parcelas.Doc_NF_Vendedores = Notas_Fiscais_Parcelas.Documento_Parcelas AND
+	Notas_Fiscais_Vendedores_Parcelas.Serie = Notas_Fiscais_Parcelas.Serie AND
+	Notas_Fiscais_Vendedores_Parcelas.Inc_Vend_Parcela = Notas_Fiscais_Parcelas.Parcela_Parcelas
+WHERE
+	Notas_Fiscais_Parcelas.Tem_Baixas IS NULL
+--WHERE 
+--	Notas_Fiscais_Parcelas.Empresa_Parcelas='01' and 
+--	Notas_Fiscais_Parcelas.Documento_Parcelas='025897' and Notas_Fiscais_Parcelas.Serie='1  55' 
+ORDER BY 
+	Parcela_Parcelas	
+
+
+
+
+
+
 --MAPEAMENTO REVERSO NA NOTA 025897
 select * from Notas_Fiscais_Rec	
 	
@@ -207,36 +338,36 @@ WHERE
 	
 	
 SELECT 
-	'001' AS CODIGO_EMPRESA, 
-	SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),1,8) AS CLI_DUP_CGC_CLI9, 
-	SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),9,4) AS CLI_DUP_CGC_CLI4,
-	SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),13,2) AS CLI_DUP_CGC_CLI2,
-	'0' AS TIPO_TITULO,
-	REPLACE(REPLACE(REPLACE(REPLACE(DA.Nota_Fiscal + DA.Serie,'.',''),'/',''),'-',''),' ','') AS NUM_DUPLICATA,
-	DA.Desdobro AS SEQ_DUPLICATAS,
-	FORMAT(DA.Vencimento, 'dd/MM/yyyy') AS DATA_VENC_DUPLIC,
-	'' AS DATA_PRORROGACAO,
-	FORMAT(DA.Emissao, 'dd/MM/yyyy') AS DATA_EMISSAO,
-	'' AS PREVISAO,
-	DA.Valor AS VALOR_DUPLICATA,
-	'0' AS SITUACAO_DUPLIC,
-	DA.Banco AS PORTADOR_DUPLIC,
-	'0' AS PEDIDO_VENDA,
-	NP.Nosso_Nr_Parcelas AS NR_TITULO_BANCO,
-	'' AS COD_REP_CLIENTE,
-	'' AS POSICAO_DUPLIC,
-	'' AS COD_HISTORICO,
-	'' AS COMPL_HISTORICO,
-	'' AS COD_LOCAL,
-	0 AS MOEDA_TITULO,
-	DA.Valor AS VALOR_MOEDA,
-	'' AS COD_TRANSACAO,
-	'' AS CODIGO_CONTABIL,
-	'' AS NUM_CONTABIL,
-	'' AS SALDO_DUPLICATA,
-	'' AS CONTA_CORRENTE,
-	'' AS NUMERO_REMESSA,
-	'' AS PERCENTUAL_COMIS,
+	--'001' AS CODIGO_EMPRESA, 
+	--SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),1,8) AS CLI_DUP_CGC_CLI9, 
+	--SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),9,4) AS CLI_DUP_CGC_CLI4,
+	--SUBSTRING(REPLACE(REPLACE(REPLACE(DA.CNPJ_CPF,'.',''),'/',''),'-',''),13,2) AS CLI_DUP_CGC_CLI2,
+	--'0' AS TIPO_TITULO,
+	--REPLACE(REPLACE(REPLACE(REPLACE(DA.Nota_Fiscal + DA.Serie,'.',''),'/',''),'-',''),' ','') AS NUM_DUPLICATA,
+	--DA.Desdobro AS SEQ_DUPLICATAS,
+	--FORMAT(DA.Vencimento, 'dd/MM/yyyy') AS DATA_VENC_DUPLIC,
+	--'' AS DATA_PRORROGACAO,
+	--FORMAT(DA.Emissao, 'dd/MM/yyyy') AS DATA_EMISSAO,
+	--'' AS PREVISAO,
+	--DA.Valor AS VALOR_DUPLICATA,
+	--'0' AS SITUACAO_DUPLIC,
+	--DA.Banco AS PORTADOR_DUPLIC,
+	--'0' AS PEDIDO_VENDA,
+	--NP.Nosso_Nr_Parcelas AS NR_TITULO_BANCO,
+	--'' AS COD_REP_CLIENTE,
+	--'' AS POSICAO_DUPLIC,
+	--'' AS COD_HISTORICO,
+	--'' AS COMPL_HISTORICO,
+	--'' AS COD_LOCAL,
+	--0 AS MOEDA_TITULO,
+	--DA.Valor AS VALOR_MOEDA,
+	--'' AS COD_TRANSACAO,
+	--'' AS CODIGO_CONTABIL,
+	--'' AS NUM_CONTABIL,
+	--'' AS SALDO_DUPLICATA,
+	--'' AS CONTA_CORRENTE,
+	--'' AS NUMERO_REMESSA,
+	--'' AS PERCENTUAL_COMIS,
 	'' AS VALOR_COMIS,
 	'' AS BASE_CALC_COMIS,
 	'' AS PERC_COMIS_CREC,
