@@ -1,3 +1,4 @@
+--fatu_070 - Títulos a receber
 SELECT 
 	NP.Empresa_Parcelas AS CODIGO_EMPRESA,
 	SUBSTRING(REPLACE(REPLACE(REPLACE(NP.Cliente,'.',''),'/',''),'-',''),1,8) AS CLI_DUP_CGC_CLI9,
@@ -16,7 +17,7 @@ SELECT
 	PF.Pedido AS PEDIDO_VENDA,
 	NP.Nosso_Nr_Parcelas AS NR_TITULO_BANCO,
 	NV.Vendedor_NF_Vendedores AS COD_REP_CLIENTE,
-	NV.Inc_Vend_Parcela AS POSICAO_DUPLIC,
+	'01' AS POSICAO_DUPLIC,
 	'' AS COD_HISTORICO,
 	'' AS COMPL_HISTORICO,
 	'1' AS COD_LOCAL,
@@ -26,7 +27,7 @@ SELECT
 	'0' AS CODIGO_CONTABIL,
 	'0' AS NUM_CONTABIL,
 	REPLACE(ISNULL(NP.Valor_Parcelas,0),'.',',') AS SALDO_DUPLICATA,
-	SUBSTRING(NP.Nr_Conta_Age_Parcelas,6,5) AS CONTA_CORRENTE,
+	SUBSTRING(NP.Nr_Conta_Age_Parcelas,6,4) AS CONTA_CORRENTE,
 	'0' AS NUMERO_REMESSA,
 	REPLACE(RC.Porcentagem_Comissoes,'.',',') AS PERCENTUAL_COMIS,
 	REPLACE(NV.Valor_Comissao_NF_Vend,'.',',') AS VALOR_COMIS,
@@ -52,7 +53,8 @@ SELECT
 	SUBSTRING(REPLACE(REPLACE(REPLACE(NP.Cliente,'.',''),'/',''),'-',''),1,8) AS CLI9RESPTIT,
 	SUBSTRING(REPLACE(REPLACE(REPLACE(NP.Cliente,'.',''),'/',''),'-',''),9,4) AS CLI4RESPTIT,
 	SUBSTRING(REPLACE(REPLACE(REPLACE(NP.Cliente,'.',''),'/',''),'-',''),13,2) AS CLI2RESPTIT,
-	'0' AS COD_FORMA_PAGTO
+	'0' AS COD_FORMA_PAGTO--,
+	--NP.Tem_Baixas
 FROM
 	Notas_Fiscais_Parcelas AS NP
 	INNER JOIN Notas_Fiscais_Vendedores_Parcelas AS NV ON 
@@ -68,11 +70,12 @@ FROM
 	  PF.Cliente = NP.Cliente 
 WHERE
 	NV.Empresa_NF_Vendedores IN ('01') and
-	NP.Vencimento_Parcelas BETWEEN '2022-07-15 00:00:00' AND '2022-07-15 00:00:00' --AND
+	NP.Vencimento_Parcelas BETWEEN '2022-01-01 00:00:00' AND '2023-01-30 00:00:00' --AND
 	--PF.Data_Nota BETWEEN '2022-07-15 00:00:00' AND '2022-12-31 00:00:00' 
 	--NV.Doc_NF_Vendedores='000003' and 
 	----NV.Parcela_NF_Vendedores='01' and 
 	--NV.Serie='1  55' 
+	AND NP.Tem_Baixas IS NULL
 ORDER BY
 	NP.Documento_Parcelas DESC,
 	NP.Serie,

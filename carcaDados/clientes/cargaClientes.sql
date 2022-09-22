@@ -1,10 +1,11 @@
 -- SCRIPT PARA CARGA DE DADOS CLIENTES - MICRODATA --> SYSTEXTIL
+-- SCRIPT PARA CARGA DE DADOS CLIENTES - MICRODATA --> SYSTEXTIL
 SELECT 
 	SUBSTRING(REPLACE(REPLACE(REPLACE(CP.CGC_Cliente,'.',''),'/',''),'-',''),1,8) AS CGC_9,
 	SUBSTRING(REPLACE(REPLACE(REPLACE(CP.CGC_Cliente,'.',''),'/',''),'-',''),9,4) AS CGC_4,
 	SUBSTRING(REPLACE(REPLACE(REPLACE(CP.CGC_Cliente,'.',''),'/',''),'-',''),13,2) AS CGC_2,
-	CP.Razao_Nome_Cliente AS NOME_CLIENTE,
-	CI.Nome_Fantasia AS FANTASIA_CLIENTE,
+	SUBSTRING(CP.Razao_Nome_Cliente,0,39) AS NOME_CLIENTE,
+	SUBSTRING(CI.Nome_Fantasia,0,39) AS FANTASIA_CLIENTE,
 	CASE CP.Inativo 
 		WHEN 'N' THEN 1
 		WHEN 'S' THEN 2
@@ -16,7 +17,7 @@ SELECT
 	CASE  
 		WHEN (LEN(REPLACE(CP.Fone2_Cliente,'-','')) <= 8) THEN REPLACE(CP.Fone2_Cliente,'-','')
 	END AS TELEX_CLIENTE,
-	REPLACE(CP.Fone_Fax_Cliente,'-','') AS FAX_CLIENTE,
+	SUBSTRING(REPLACE(CP.Fone_Fax_Cliente,'-',''),1,7) AS FAX_CLIENTE,
 	CASE  
 		WHEN (LEN(REPLACE(CP.Fone1_Cliente,'-','')) = 9) THEN REPLACE(CP.Fone1_Cliente,'-','')
 	END AS CELULAR_CLIENTE,
@@ -33,9 +34,9 @@ SELECT
 	0 AS MOT_EXC_CLIENTE,
 	CV.Vendedor AS CDREPRES_CLIENTE,
 	SUBSTRING(CP.Bairro_Cliente,1,20) AS BAIRRO,
-	CO.Email_Nfe AS NFE_E_MAIL,
+	SUBSTRING(CO.Email_Nfe,0,99) AS NFE_E_MAIL,
 	CP.Numero_Cliente AS NUMERO_IMOVEL,
-	CP.Complemento_Cliente AS COMPLEMENTO,
+	SUBSTRING(CP.Complemento_Cliente,0,19) AS COMPLEMENTO,
 	--CP.Cidade_Cliente AS COD_CIDADE
 	'' AS COD_CIDADE,
 	0 AS SUB_REGIAO,
@@ -46,7 +47,7 @@ SELECT
 	END	AS COD_SIT_CREDITO,
 	FORMAT(CP.Fundacao_ou_Nascimento, 'dd/MM/yyyy') AS DATA_FUNDACAO,
 	CP.Observacoes_Cliente AS OBSERVACAO,
-	CP.Ramo_Cliente AS COD_RAMO_ATIV, --SISTEMA NÃO POSSUI CÓDIGO DE RAMO DE ATIVIDADE
+	'0' AS COD_RAMO_ATIV,--CP.Ramo_Cliente AS COD_RAMO_ATIV, --SISTEMA NÃO POSSUI CÓDIGO DE RAMO DE ATIVIDADE
 	CASE CP.Conceito_Cliente 
 		WHEN 'A' THEN 10
 		WHEN 'B' THEN 09
@@ -108,4 +109,5 @@ FROM
 	LEFT JOIN DBMicrodata.dbo.Clientes_Vendedores CV ON CV.Codigo_Cliente_Vendedores = CP.Codigo_Cliente
 	LEFT JOIN DBMicrodata.dbo.Clientes_Outros CO ON CO.Codigo_Cliente_Outros = CP.Codigo_Cliente
 WHERE
-	CP.Tipo_Entidade IN ('C','A')
+	--CP.Tipo_Entidade IN ('C','A') AND
+	CP.CGC_Cliente <> ''
