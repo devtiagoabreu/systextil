@@ -74,31 +74,18 @@ SELECT
 	NP.Parcela_Parcelas AS NR_TITUL_SEQ_DUP,
 	'0' AS SEQ_PAGAMENTO,
 	FORMAT(Max(B.Data_Baixa), 'dd/MM/yyyy') AS DATA_PAGAMENTO,
-	SUM(IsNull(B.Valor_Recebido,0)) AS VALOR_PAGO,
+	SUM(IsNull(B.Valor_Liquido,0)) AS VALOR_PAGO,
 	'0' AS HISTORICO_PGTO,
 	'0' AS NUMERO_DOCUMENTO,
-	SUM(IsNull(B.Juros_Recebidos,0)) AS VALOR_JUROS
-	SUM(IsNull(B.Desconto_Concedido,0)) AS VALOR_DESCONTOS
+	SUM(IsNull(B.Juros_Recebidos,0)) AS VALOR_JUROS,
+	SUM(IsNull(B.Desconto_Concedido,0)) AS VALOR_DESCONTOS,
 	NP.Banco_Parcelas AS PORTADOR,
 	'' AS CONTA_CORRENTE,
-	FORMAT(Max(B.Data_Baixa), 'dd/MM/yyyy') AS DATA_CREDITO
+	FORMAT(Max(B.Data_Baixa), 'dd/MM/yyyy') AS DATA_CREDITO,
 	'0' AS DOCTO_PAGTO,
-	
-	
-	
-	C.Razao_Nome_Cliente, 
-	
-	B.Serie, 
-	B.Parcela, 
-	NF.Emissao_NF Emissao, 
-	NP.Vencimento_Parcelas Vencimento, 
-     
-     Bco, 
-    NP.Operacao_Parcelas Operacao,      
-     Valor, 
-    
-   
-               
+	SUM(IsNull(B.Valor_Recebido,0)) AS VALOR_PAGO_MOEDA,
+	SUM(IsNull(B.Desconto_Concedido,0)) AS VLR_DESCONTO_MOEDA,
+	SUM(IsNull(B.Juros_Recebidos,0)) AS VLR_JUROS_MOEDA
 FROM 
 	DBMicrodata.dbo.Notas_Fiscais_Rec NF 
 	INNER JOIN DBMicrodata.dbo.Notas_Fiscais_Parcelas NP ON (NF.Nr_Empresa_NF=NP.Empresa_Parcelas and NF.Nr_Documento_NF=NP.Documento_Parcelas and NF.Serie=NP.Serie)    
