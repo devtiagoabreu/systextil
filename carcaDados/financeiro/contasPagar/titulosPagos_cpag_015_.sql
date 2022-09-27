@@ -21,12 +21,13 @@ SELECT
 	TB.Nr_Banco, H.Nome_Hist_Historicos AS Nome_Hist 
 FROM 
 	NF_Entradas AS TNF 
-	Inner Join NFE_Parcelas AS TP ON (TP.Empresa=TNF.Empresa and TP.Documento=TNF.Documento and TP.Tipo_Fornec=TNF.Tipo_Fornec and TP.Fornecedor=TNF.Fornecedor and TP.Serie=TNF.Serie) 
-	Inner Join Pag_Baixas AS TB ON (TB.Empresa=TP.Empresa and TB.Documento=TP.Documento and TB.Parcela=TP.Parcela and TB.Tipo_Fornec=TP.Tipo_Fornec and TB.Fornecedor=TP.Fornecedor and TB.Serie=TP.Serie) 
-	Inner Join Pag_Historicos H ON (H.Cod_Historico_Historicos=TB.Cod_Historico) Inner Join Clientes_Principal AS TF ON (TF.Tipo=TNF.Tipo_Fornec and TF.Codigo=TNF.Fornecedor and (Tipo_Entidade = 'A' or Tipo_Entidade='F')) 
+	INNER JOIN NFE_Parcelas AS TP ON (TP.Empresa=TNF.Empresa AND TP.Documento=TNF.Documento AND TP.Tipo_Fornec=TNF.Tipo_Fornec AND TP.Fornecedor=TNF.Fornecedor AND TP.Serie=TNF.Serie) 
+	INNER JOIN Pag_Baixas AS TB ON (TB.Empresa=TP.Empresa AND TB.Documento=TP.Documento AND TB.Parcela=TP.Parcela AND TB.Tipo_Fornec=TP.Tipo_Fornec AND TB.Fornecedor=TP.Fornecedor AND TB.Serie=TP.Serie) 
+	INNER JOIN Pag_Historicos H ON (H.Cod_Historico_Historicos=TB.Cod_Historico) 
+	INNER JOIN Clientes_Principal AS TF ON (TF.Tipo=TNF.Tipo_Fornec AND TF.Codigo=TNF.Fornecedor AND (Tipo_Entidade = 'A' OR Tipo_Entidade='F')) 
 WHERE 
-	(Data_Baixa>='2022-01-01T00:00:00' and Data_Baixa<='2022-09-30T00:00:00') AND 
-	(TP.Empresa in ('01' , '02')) 
+	(Data_Baixa>='2022-01-01T00:00:00' AND Data_Baixa<='2022-09-30T00:00:00') AND 
+	(TP.Empresa IN ('01' , '02')) 
 GROUP BY 
 	TNF.Tipo_Fornec, 
 	TNF.Serie, 
