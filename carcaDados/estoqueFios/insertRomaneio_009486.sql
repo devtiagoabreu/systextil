@@ -4,7 +4,7 @@ SELECT
 	CF.Documento AS NFe,
 	CF.Serie AS Serie,
 	CONVERT(DATE,GETDATE()) AS Data_Emissao,
-	'008486' AS Romaneio_Fornecedor,
+	'009486' AS Romaneio_Fornecedor,
 	CP.CGC_Cliente AS Codigo_Fornecedor,
 	CP.Razao_Nome_Cliente AS Razao_Social_Fornecedor,
 	CF.Produto AS Codigo_Produto_Microdata,

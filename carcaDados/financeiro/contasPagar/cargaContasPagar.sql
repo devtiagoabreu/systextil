@@ -70,7 +70,7 @@ FROM
 	  PF.Serie = NP.Serie AND
 	  PF.Cliente = NP.Cliente 
 WHERE
-	NV.Empresa_NF_Vendedores IN ('01') and
+	NV.Empresa_NF_Vendedores IN ('01','02') and
 	NP.Vencimento_Parcelas BETWEEN '2022-01-01 00:00:00' AND '2023-01-30 00:00:00' --AND
 	--PF.Data_Nota BETWEEN '2022-07-15 00:00:00' AND '2022-12-31 00:00:00' 
 	--NV.Doc_NF_Vendedores='000003' and 
