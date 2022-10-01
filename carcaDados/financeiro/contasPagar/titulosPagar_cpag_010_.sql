@@ -17,13 +17,18 @@ SELECT
     ISNULL(P.Valor,0) Valor_Parcela, 
     SUM(ISNULL(B.Valor_Liquido,0)) Valor_Baixas, (ISNULL(P.Valor,0) - SUM(ISNULL(B.Valor_Liquido,0))) Valor_Saldo,
     DATEDIFF(dd, P.Vencimento, GETDATE()) Dias, 
-    P.CodigoBarra, 
-    P.Id_SisPag 
+    P.CodigoBarra 
+    --P.Id_SisPag 
 FROM 
-	(DBMicrodata.dbo.NFE_Parcelas P 
-	LEFT JOIN DBMicrodata.dbo.Pag_Baixas B ON (B.Empresa=P.Empresa and B.Documento=P.Documento and B.Serie=P.Serie and B.Tipo_Fornec=P.Tipo_Fornec and B.Fornecedor=P.Fornecedor and B.Parcela=P.Parcela)) 
-	INNER JOIN DBMicrodata.dbo.NF_Entradas NF ON (NF.Empresa=P.Empresa and NF.Documento=P.Documento and NF.Serie=P.Serie and NF.Tipo_Fornec=P.Tipo_Fornec and NF.Fornecedor=P.Fornecedor) 
-	--left JOIN DBMicrodata.dbo.Clientes_Principal C ON (C.Codigo=NF.Fornecedor) 
+	NF_Entradas AS TNF 
+	INNER JOIN NFE_Parcelas AS P ON (P.Empresa=TNF.Empresa AND P.Documento=TNF.Documento AND P.Tipo_Fornec=TNF.Tipo_Fornec AND P.Fornecedor=TNF.Fornecedor AND P.Serie=TNF.Serie) 
+	INNER JOIN Pag_Baixas AS B ON (B.Empresa=P.Empresa AND B.Documento=P.Documento AND B.Parcela=P.Parcela AND B.Tipo_Fornec=P.Tipo_Fornec AND B.Fornecedor=P.Fornecedor AND B.Serie=P.Serie) 
+	INNER JOIN Pag_Historicos H ON (H.Cod_Historico_Historicos=B.Cod_Historico) 
+	INNER JOIN Clientes_Principal AS TF ON (TF.Tipo=TNF.Tipo_Fornec AND TF.Codigo=TNF.Fornecedor AND (Tipo_Entidade = 'A' OR Tipo_Entidade='F')) 
+	--(DBMicrodata.dbo.NFE_Parcelas P 
+	--LEFT JOIN DBMicrodata.dbo.Pag_Baixas B ON (B.Empresa=P.Empresa and B.Documento=P.Documento and B.Serie=P.Serie and B.Tipo_Fornec=P.Tipo_Fornec and B.Fornecedor=P.Fornecedor and B.Parcela=P.Parcela)) 
+	--INNER JOIN DBMicrodata.dbo.NF_Entradas NF ON (NF.Empresa=P.Empresa and NF.Documento=P.Documento and NF.Serie=P.Serie and NF.Tipo_Fornec=P.Tipo_Fornec and NF.Fornecedor=P.Fornecedor) 
+	--INNER JOIN DBMicrodata.dbo.Clientes_Principal C ON (C.Codigo=NF.Fornecedor) 
 where
 	P.Empresa in ('01','02') --and
 	--C.CGC_Cliente <> ''
@@ -40,7 +45,7 @@ GROUP BY
 	ISNULL(NF.Vr_Total_Parcelas,0),
     P.Vencimento, 
     NF.Data_Emissao,
-    P.CodigoBarra, 
+    P.CodigoBarra 
     --P.Id_SisPag 
 HAVING 
 	SUM(ISNULL(B.Valor_Liquido,0)) < ISNULL(P.Valor,0)
@@ -50,8 +55,8 @@ ORDER BY
 
 -- SELECT COM CAMPOS SYST�XTIL
 SELECT
-	'' AS NR_DUPLICATA,
-	'' AS PARCELA,
+	P.Documento AS NR_DUPLICATA,
+	P.Parcela AS PARCELA,
 	'' AS CGC_9,
 	'' AS CGC_4,
 	'' AS CGC_2,
