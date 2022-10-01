@@ -183,3 +183,64 @@ SELECT REL.Empresa, REL.Fornec, REL.Fornecedor, REL.Titulo, REL.Serie, REL.Parce
 
 SELECT REL.Empresa, REL.Fornecedor, REL.Documento, REL.Serie, REL.Parcela, REL.Valor_Parcela,  *  FROM DBPromoda.dbo.SelTitAb_systextil REL ORDER BY REL.Empresa, REL.Fornecedor, REL.Documento, REL.Serie, REL.Parcela
 
+
+
+-- 
+SELECT
+	*,
+	'' AS NR_DUPLICATA, --? 
+	REL.Parcela AS PARCELA,
+	'' AS CGC_9,
+	'' AS CGC_4,
+	'' AS CGC_2,
+	CASE REL.Empresa 
+		WHEN '01' THEN '11'
+		ELSE '32'
+	END	AS TIPO_TITULO,
+	'01' AS CODIGO_EMPRESA,
+	REL.Titulo AS DOCUMENTO,
+	REL.Serie AS SERIE,
+	'0' AS SITUACAO, -- digitado
+	FORMAT(CONVERT(DATETIME,REL.Emissao,103), 'dd/MM/yyyy') AS DATA_CONTRATO,
+	FORMAT(CONVERT(DATETIME,REL.Vencimento,103), 'dd/MM/yyyy') AS DATA_VENCIMENTO,
+	'' AS DATA_DIGITACAO,
+	'' AS DATA_TRANSACAO,
+	'' AS VALOR_PARCELA,
+	'' AS SALDO_TITULO,
+	'' AS TIPO_PAGAMENTO,
+	'' AS COD_END_COBRANCA,
+	'' AS COD_PORTADOR,
+	'' AS PREVISAO,
+	'' AS CODIGO_DEPTO,
+	'' AS CODIGO_HISTORICO,
+	'' AS CODIGO_TRANSACAO,
+	'' AS EMITENTE_TITULO,
+	'' AS ORIGEM_DEBITO,
+	'' AS POSICAO_TITULO,
+	'' AS VALOR_MOEDA,
+	'' AS MOEDA_TITULO,
+	'' AS CODIGO_CONTABIL,
+	'' AS COMPL_HISTORICO,
+	'' AS NR_TITULO_BANCO,
+	'' AS NUM_CONTABIL,
+	'' AS VALOR_ISS,
+	'' AS VALOR_IRRF,
+	'' AS VALOR_DESC,
+	'' AS VALOR_JUROS,
+	'' AS VALOR_INSS,
+	'' AS USUARIO_DIGITACAO,
+	'' AS CODIGO_BARRAS
+FROM
+	DBPromoda.dbo.RelTitAb_systextil REL
+	INNER JOIN DBPromoda.dbo.SelTitAb_systextil SEL ON 
+		SUBSTRING(REL.Fornec,2,6) = SEL.Fornecedor AND
+		REL.Empresa = SEL.Empresa AND 
+		REL.Titulo = SEL.Documento AND 
+		REL.Serie = SEL.Serie AND 
+		REL.Parcela = SEL.Parcela
+ORDER BY 
+	REL.Empresa, 
+	REL.Fornec, 
+	REL.Titulo, 
+	REL.Serie, 
+	REL.Parcela	
