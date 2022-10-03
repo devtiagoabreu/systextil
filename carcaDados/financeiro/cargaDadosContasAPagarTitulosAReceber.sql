@@ -1,5 +1,6 @@
 --CRIANDO TABELA DE TITULOS A PAGAR
 
+DROP TABLE DBPromoda.dbo.RelTitAb_systextil; 
 CREATE TABLE DBPromoda.dbo.RelTitAb_systextil (
 
 	Fornec VARCHAR(255) Null,
@@ -33,7 +34,7 @@ Insert Into #Tp_RelTitAb_Emp Values ('01')
 
 Insert Into #Tp_RelTitAb_Emp Values ('02')
 
-select * from DBPromoda.dbo.RelTitAb_systextil WHERE FORNEC = '00200'
+select * from DBPromoda.dbo.RelTitAb_systextil
 
 Insert Into DBPromoda.dbo.RelTitAb_systextil (
 	Fornec,
@@ -79,7 +80,7 @@ Insert Into DBPromoda.dbo.RelTitAb_systextil (
 	Ch2,
 	Titulo','#Tp_RelTitAb_Emp','','','1900-01-01T00:00:00','1900-01-01T00:00:00','','','S', 'N', '', 'S', 'N';
 	
-
+DROP TABLE DBPromoda.dbo.SelTitAb_systextil;
 CREATE TABLE DBPromoda.dbo.SelTitAb_systextil (
 	Id_SisPag VARCHAR(255) Null,
 	Empresa VARCHAR(255) Null,
@@ -183,16 +184,17 @@ SELECT REL.Empresa, REL.Fornec, REL.Fornecedor, REL.Titulo, REL.Serie, REL.Parce
 
 SELECT REL.Empresa, REL.Fornecedor, REL.Documento, REL.Serie, REL.Parcela, REL.Valor_Parcela,  *  FROM DBPromoda.dbo.SelTitAb_systextil REL ORDER BY REL.Empresa, REL.Fornecedor, REL.Documento, REL.Serie, REL.Parcela
 
+select * FROM DBPromoda.dbo.RelTitAb_systextil REL
 
+select * FROM DBPromoda.dbo.SelTitAb_systextil SEL
 
--- 
+-- CONTAS A PAGAR - TITULOS EM ABERTO
 SELECT
-	*,
-	'' AS NR_DUPLICATA, --? 
+	REL.Titulo AS NR_DUPLICATA,  
 	REL.Parcela AS PARCELA,
-	'' AS CGC_9,
-	'' AS CGC_4,
-	'' AS CGC_2,
+	'' AS CGC_9, --CNPJ
+	'' AS CGC_4, --CNPJ
+	'' AS CGC_2, --CNPJ
 	CASE REL.Empresa 
 		WHEN '01' THEN '11'
 		ELSE '32'
@@ -203,32 +205,32 @@ SELECT
 	'0' AS SITUACAO, -- digitado
 	FORMAT(CONVERT(DATETIME,REL.Emissao,103), 'dd/MM/yyyy') AS DATA_CONTRATO,
 	FORMAT(CONVERT(DATETIME,REL.Vencimento,103), 'dd/MM/yyyy') AS DATA_VENCIMENTO,
-	'' AS DATA_DIGITACAO,
-	'' AS DATA_TRANSACAO,
-	'' AS VALOR_PARCELA,
-	'' AS SALDO_TITULO,
-	'' AS TIPO_PAGAMENTO,
-	'' AS COD_END_COBRANCA,
-	'' AS COD_PORTADOR,
-	'' AS PREVISAO,
-	'' AS CODIGO_DEPTO,
-	'' AS CODIGO_HISTORICO,
-	'' AS CODIGO_TRANSACAO,
-	'' AS EMITENTE_TITULO,
-	'' AS ORIGEM_DEBITO,
-	'' AS POSICAO_TITULO,
-	'' AS VALOR_MOEDA,
-	'' AS MOEDA_TITULO,
-	'' AS CODIGO_CONTABIL,
-	'' AS COMPL_HISTORICO,
-	'' AS NR_TITULO_BANCO,
-	'' AS NUM_CONTABIL,
-	'' AS VALOR_ISS,
-	'' AS VALOR_IRRF,
-	'' AS VALOR_DESC,
-	'' AS VALOR_JUROS,
-	'' AS VALOR_INSS,
-	'' AS USUARIO_DIGITACAO,
+	FORMAT(CONVERT(DATETIME,REL.Emissao,103), 'dd/MM/yyyy') AS DATA_DIGITACAO,
+	FORMAT(CONVERT(DATETIME,REL.Vencimento,103), 'dd/MM/yyyy') AS DATA_TRANSACAO,
+	REL.Valor AS VALOR_PARCELA,
+	ISNULL(SEL.Valor_Saldo,'0') AS SALDO_TITULO,
+	'01' AS TIPO_PAGAMENTO,
+	'02' AS COD_END_COBRANCA,
+	'001' AS COD_PORTADOR,
+	'0' AS PREVISAO,
+	'1000' AS CODIGO_DEPTO,
+	'206' AS CODIGO_HISTORICO,
+	'901' AS CODIGO_TRANSACAO,
+	REL.Fornecedor AS EMITENTE_TITULO,
+	REL.Referente + '| ' + REL.DOperacao AS ORIGEM_DEBITO,
+	'04' AS POSICAO_TITULO,
+	REL.Valor AS VALOR_MOEDA,
+	'00' AS MOEDA_TITULO,
+	'0' AS CODIGO_CONTABIL,
+	REL.Titulo + '-' + REL.Parcela AS COMPL_HISTORICO,
+	REL.Titulo AS NR_TITULO_BANCO,
+	'0' AS NUM_CONTABIL,
+	'0' AS VALOR_ISS,
+	'0' AS VALOR_IRRF,
+	'0' AS VALOR_DESC,
+	'0' AS VALOR_JUROS,
+	'0' AS VALOR_INSS,
+	'9999' AS USUARIO_DIGITACAO,
 	'' AS CODIGO_BARRAS
 FROM
 	DBPromoda.dbo.RelTitAb_systextil REL
