@@ -1,3 +1,5 @@
+--CARGA DE CONTAS A PAGAR - TÍTULOS EM ABERTO
+
 --CRIANDO TABELA DE TITULOS A PAGAR
 
 DROP TABLE DBPromoda.dbo.RelTitAb_systextil; 
@@ -246,3 +248,15 @@ ORDER BY
 	REL.Titulo, 
 	REL.Serie, 
 	REL.Parcela	
+	
+	
+	
+SELECT
+ CP.CGC_Cliente,
+ *
+FROM
+	DBPromoda.dbo.vwCargaDadosContaAPagarTitulosAbertos AS VWTA
+	INNER JOIN  DBMicrodata.dbo.CLIENTES_PRINCIPAL AS CP ON CP.Razao_Nome_Cliente = VWTA.EMITENTE_TITULO
+	
+	
+SELECT * FROM DBMicrodata.dbo.CLIENTES_PRINCIPAL
