@@ -44,7 +44,7 @@ FROM
 	INNER JOIN Pag_Historicos H ON (H.Cod_Historico_Historicos=TB.Cod_Historico) 
 	INNER JOIN Clientes_Principal AS TF ON (TF.Tipo=TNF.Tipo_Fornec AND TF.Codigo=TNF.Fornecedor AND (Tipo_Entidade = 'A' OR Tipo_Entidade='F')) 
 WHERE 
-	(Data_Baixa>='2022-09-01T00:00:00' AND Data_Baixa<='2022-09-30T00:00:00') AND 
+	(Data_Baixa>='2021-12-01T00:00:00' AND Data_Baixa<='2022-10-30T00:00:00') AND 
 	(TP.Empresa IN ('01' , '02')) 
 GROUP BY 
 	TNF.Tipo_Fornec, 
