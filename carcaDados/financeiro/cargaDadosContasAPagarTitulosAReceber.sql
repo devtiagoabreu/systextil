@@ -192,6 +192,7 @@ select * FROM DBPromoda.dbo.SelTitAb_systextil SEL
 
 -- CONTAS A PAGAR - TITULOS EM ABERTO
 SELECT
+	SUBSTRING(REL.Fornec,2,6) AS FornecedorCodigo,
 	REL.Titulo AS NR_DUPLICATA,  
 	REL.Parcela AS PARCELA,
 	'' AS CGC_9, --CNPJ
@@ -250,13 +251,36 @@ ORDER BY
 	REL.Parcela	
 	
 	
-	
 SELECT
- CP.CGC_Cliente,
+ --SUBSTRING(VWTA.FORNECEDOR_CODIGO,2,6) AS FORNECEDOR,
  *
 FROM
 	DBPromoda.dbo.vwCargaDadosContaAPagarTitulosAbertos AS VWTA
-	INNER JOIN  DBMicrodata.dbo.CLIENTES_PRINCIPAL AS CP ON CP.Razao_Nome_Cliente = VWTA.EMITENTE_TITULO
+ORDER BY 
+	CODIGO_EMPRESA,
+	FORNECEDOR_CODIGO, 
+	DOCUMENTO, 
+	Serie, 
+	Parcela	
+
 	
-	
-SELECT * FROM DBMicrodata.dbo.CLIENTES_PRINCIPAL
+SELECT
+	CP.Codigo_Cliente,
+	*
+FROM
+	DBPromoda.dbo.vwCargaDadosContaAPagarTitulosAbertos AS VWTA
+	LEFT JOIN  DBMicrodata.dbo.CLIENTES_PRINCIPAL AS CP ON  CP.Razao_Nome_Cliente = VWTA.Razao_Nome_Cliente
+ORDER BY 
+	CODIGO_EMPRESA,
+	VWTA.Razao_Nome_Cliente,
+	FORNECEDOR_CODIGO, 
+	DOCUMENTO, 
+	Serie, 
+	Parcela		
+
+
+
+
+select * FROM DBPromoda.dbo.SelTitAb_systextil 
+select * from DBPromoda.dbo.RelTitAb_systextil	-- O CAMPO TEM UM CARACTER A MAIS NO INÍCIO 
+SELECT Codigo,* FROM DBMicrodata.dbo.CLIENTES_PRINCIPAL AS CP WHERE CP.Codigo_cliente = '900035'

@@ -14,6 +14,7 @@ CREATE VIEW [dbo].[vwCargaDadosContaAPagarTitulosAbertos]
 AS
 
 SELECT
+	SEL.FORNECEDOR,
 	REL.Titulo AS NR_DUPLICATA,  
 	REL.Parcela AS PARCELA,
 	'' AS CGC_9, --CNPJ
